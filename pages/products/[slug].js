@@ -10,7 +10,9 @@ import { Store } from "../../utilities/Store";
 export default function ProductScreen() {
   const { state, dispatch } = useContext(Store);
 
-  const { query } = useRouter();
+  const router = useRouter();
+  //const { query } = useRouter();
+  const { query } = router;
   const { slug } = query;
 
   const product = data.products.find((product) => product.slug === slug);
@@ -33,6 +35,8 @@ export default function ProductScreen() {
       type: "CART_ADD_ITEM",
       payload: { ...product, quantity: quantity },
     });
+
+    router.push("/cart");
     console.log("State: "); // test
     console.log(state); // test
   };

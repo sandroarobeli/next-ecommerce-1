@@ -1,7 +1,30 @@
 import Link from "next/link";
-import React from "react";
+import React, { useContext } from "react";
+
+import { Store } from "../utilities/Store";
 
 export default function ProductItem({ product }) {
+  const { state, dispatch } = useContext(Store);
+
+  const addToCartHandler = () => {
+    const existingItem = state.cart.cartItems.find(
+      (item) => item.slug === product.slug
+    );
+    // If an item is already selected, it increases its quantity, if not - just assigns 1 to start with
+    const quantity = existingItem ? existingItem.quantity + 1 : 1;
+    // If more chosen than in storage, stops execution and throws an alert modal
+    if (quantity > product.countInStock) {
+      return alert("Out of stock!");
+    }
+
+    dispatch({
+      type: "CART_ADD_ITEM",
+      payload: { ...product, quantity: quantity },
+    });
+    console.log("State: "); // test
+    console.log(state); // test
+  };
+
   return (
     <div className="cart">
       <Link href={`/products/${product.slug}`}>
@@ -21,7 +44,11 @@ export default function ProductItem({ product }) {
         </Link>
         <p className="mb-2">{product.brand}</p>
         <p className="mb-2">${product.price} </p>
-        <button className="primary-button" type="button">
+        <button
+          className="primary-button"
+          type="button"
+          onClick={addToCartHandler}
+        >
           Add to cart
         </button>
       </div>
