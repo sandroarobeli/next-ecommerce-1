@@ -28,7 +28,9 @@ export default function Layout({ title, children }) {
         </header>
         <main className="container m-auto mt-4 px-4">{children}</main>
         <footer className="flex justify-center items-center h-12 shadow-inner">
-          footer
+          <h2 className="text-base font-semibold">
+            Copyright &copy; {new Date().getFullYear()} E-Commerce
+          </h2>
         </footer>
       </div>
     </>
