@@ -26,12 +26,7 @@ export default function Layout({ title, children }) {
             </div>
           </nav>
         </header>
-        <main
-          className="container m-auto mt-4 px-4"
-          style={{ border: "1px solid red" }}
-        >
-          {children}
-        </main>
+        <main className="container m-auto mt-4 px-4">{children}</main>
         <footer className="flex justify-center items-center h-12 shadow-inner">
           footer
         </footer>
