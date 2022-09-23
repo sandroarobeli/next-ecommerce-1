@@ -1,14 +1,16 @@
 import Link from "next/link";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import React, { useContext } from "react";
-//import { XCircleIcon } from "@heroicons/react/outline";
 
 import Layout from "../components/Layout";
 import XCircleIcon from "../components/XCircleIcon";
 import { Store } from "../utilities/Store";
 
-export default function CartScreen() {
+// We need to render this as client side component, so the CLIENT side content (with full cart)
+// Can match SERVER side content (while cart is still empty). See the export statement at the end!
+function CartScreen() {
   const router = useRouter();
   const { state, dispatch } = useContext(Store);
   const { cart } = state;
@@ -20,6 +22,15 @@ export default function CartScreen() {
 
   const EmptyTheCart = () => {
     dispatch({ type: "CART_EMPTY" });
+  };
+
+  const updateCartHandler = (item, quantity) => {
+    const updatedQuantity = Number(quantity);
+
+    dispatch({
+      type: "CART_ADD_ITEM",
+      payload: { ...item, quantity: updatedQuantity },
+    });
   };
 
   console.log("Cart Items: ", cartItems); // test
@@ -62,7 +73,20 @@ export default function CartScreen() {
                         </a>
                       </Link>
                     </td>
-                    <td className="p-5 text-right">{item.quantity}</td>
+                    <td className="p-5 text-right">
+                      <select
+                        value={item.quantity}
+                        onChange={(event) =>
+                          updateCartHandler(item, event.target.value)
+                        }
+                      >
+                        {[...Array(item.countInStock).keys()].map((number) => (
+                          <option key={number + 1} value={number + 1}>
+                            {number + 1}
+                          </option>
+                        ))}
+                      </select>
+                    </td>
                     <td className="p-5 text-right">${item.price}</td>
                     <td
                       className="p-5"
@@ -106,3 +130,6 @@ export default function CartScreen() {
     </Layout>
   );
 }
+
+// Renders it Client side
+export default dynamic(() => Promise.resolve(CartScreen), { ssr: false });

@@ -37,10 +37,16 @@ export default function ProductScreen() {
     });
 
     router.push("/cart");
-    console.log("State: "); // test
-    console.log(state); // test
   };
 
+  const updateCartHandler = (item, quantity) => {
+    const updatedQuantity = Number(quantity);
+
+    dispatch({
+      type: "CART_ADD_ITEM",
+      payload: { ...item, quantity: updatedQuantity },
+    });
+  };
   // md: grid-cols-4 Means everything above medium measures as follows
   return (
     <Layout title={product.name}>

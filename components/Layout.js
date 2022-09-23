@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import Head from "next/head";
 import Link from "next/link";
 
@@ -7,6 +7,12 @@ import { Store } from "../utilities/Store";
 export default function Layout({ title, children }) {
   const { state, dispatch } = useContext(Store);
   const { cart } = state;
+  // Retrieves cart items count from dynamically rendered cart and updated the badge icon
+  // Again as a refresher, useEffect only works Client side!
+  const [cartItemsCount, setCartItemsCount] = useState(0);
+  useEffect(() => {
+    setCartItemsCount(cart.cartItems.reduce((a, c) => a + c.quantity, 0));
+  }, [cart.cartItems, dispatch]);
 
   return (
     <>
@@ -26,7 +32,11 @@ export default function Layout({ title, children }) {
                 <a className="px-2">
                   Cart
                   <span className="ml-1 rounded-full bg-red-600 px-2 py-1 text-xs font-bold text-white">
-                    {cart.cartItems.reduce((a, c) => a + c.quantity, 0)}
+                    {
+                      // Reflects updated current count
+                      cartItemsCount
+                      //cart.cartItems.reduce((a, c) => a + c.quantity, 0)
+                    }
                   </span>
                 </a>
               </Link>
