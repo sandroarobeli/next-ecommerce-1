@@ -120,7 +120,8 @@ function CartScreen() {
             </div>
             <button
               className="primary-button w-full"
-              onClick={() => router.push("/shipping")}
+              // If the user === logged in, we redirect to shipping, otherwise we keep him in login
+              onClick={() => router.push("login?redirect=/shipping")}
             >
               Check Out
             </button>
