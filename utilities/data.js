@@ -1,4 +1,21 @@
+import bcrypt from "bcryptjs";
+
+// Initial seed dummy data
 const data = {
+  users: [
+    {
+      name: "Alex",
+      email: "admin@email.com",
+      password: bcrypt.hashSync("123456"),
+      isAdmin: true,
+    },
+    {
+      name: "Katie",
+      email: "user@email.com",
+      password: bcrypt.hashSync("123456"),
+      isAdmin: false,
+    },
+  ],
   products: [
     {
       name: "Free Shirt",

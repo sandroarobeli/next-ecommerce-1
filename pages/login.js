@@ -18,7 +18,6 @@ export default function LoginScreen() {
     console.log("password: ", password);
     resetField("email"); // test
     resetField("password"); // test
-    //  console.log("formState: ", formState);
   };
 
   return (
@@ -38,13 +37,6 @@ export default function LoginScreen() {
             placeholder="Enter email"
             // Registering the parameter with validation options
             {...register("email", {
-              // onBlur: (e) => {
-              //   if (!e.target.value) {
-              //     console.log("Email cannot be empty!");
-              //   }
-              //   console.log("Passed");
-              // }, // test
-              onChange: (event) => console.log(event.target.value), // test
               required: "Please enter your email",
               pattern: {
                 value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/i,
@@ -77,7 +69,7 @@ export default function LoginScreen() {
           {
             errors.password && (
               <div className="text-red-500">{errors.password.message}</div>
-            ) /* This expression checks for registered errors with email */
+            ) /* This expression checks for registered errors with password */
           }
         </div>
         <div className="mb-4">
