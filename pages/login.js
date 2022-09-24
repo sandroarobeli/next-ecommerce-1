@@ -1,11 +1,27 @@
+import React, { useEffect } from "react";
 import Link from "next/link";
-import React from "react";
+import { useRouter } from "next/router";
+import { signIn, useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
-import Layout from "../components/Layout";
+import { toast } from "react-toastify";
 
-// Text-color: text-cyan-700 etc.
+import Layout from "../components/Layout";
+import { getError } from "../utilities/error";
 
 export default function LoginScreen() {
+  const router = useRouter();
+  const { redirect } = router.query;
+
+  const { data: session } = useSession();
+
+  // Checks on every page reload if the user is already signed in..
+  useEffect(() => {
+    // If this exists, the user is already signed in. So we redirect..
+    if (session?.user) {
+      router.push(redirect || "/");
+    }
+  }, [router, session, redirect]);
+
   const {
     handleSubmit,
     resetField, // test
@@ -13,11 +29,26 @@ export default function LoginScreen() {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = ({ email, password }) => {
-    console.log("email: ", email);
-    console.log("password: ", password);
-    resetField("email"); // test
-    resetField("password"); // test
+  const onSubmit = async ({ email, password }) => {
+    try {
+      const result = await signIn("credentials", {
+        redirect: false,
+        email,
+        password,
+      });
+      //console.log("email: ", email);
+      //console.log("password: ", password);
+      resetField("email"); // test restore
+      resetField("password"); // test restore
+      if (result.error) {
+        console.log(result.error); // test
+        toast.error(result.error);
+      }
+    } catch (error) {
+      // Probably code 500 type of error
+      console.log(error); // test
+      toast.error(getError(error));
+    }
   };
 
   return (

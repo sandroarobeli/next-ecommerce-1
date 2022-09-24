@@ -1,12 +1,20 @@
 import React, { useContext, useState, useEffect } from "react";
 import Head from "next/head";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import { Store } from "../utilities/Store";
 
 export default function Layout({ title, children }) {
   const { state, dispatch } = useContext(Store);
   const { cart } = state;
+
+  const { status, data: session } = useSession();
+  // status: "loading" | "authenticated" | "unauthenticated"
+  // session: This can be three values: Session / undefined / null
+
   // Retrieves cart items count from dynamically rendered cart and updated the badge icon
   // Again as a refresher, useEffect only works Client side!
   const [cartItemsCount, setCartItemsCount] = useState(0);
@@ -21,6 +29,7 @@ export default function Layout({ title, children }) {
         <meta name="description" content="E-Commerce website" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <ToastContainer position="bottom-center" limit={1} />
       <div className="flex min-h-screen flex-col justify-between">
         <header>
           <nav className="flex h-16 px-4 justify-between items-center shadow-md">
@@ -40,9 +49,16 @@ export default function Layout({ title, children }) {
                   </span>
                 </a>
               </Link>
-              <Link href={"/login"}>
-                <a className="px-2">Login</a>
-              </Link>
+
+              {status === "loading" ? (
+                "Loading..."
+              ) : session?.user ? (
+                session.user.name
+              ) : (
+                <Link href={"/login"}>
+                  <a className="p-2">Login</a>
+                </Link>
+              )}
             </div>
           </nav>
         </header>
