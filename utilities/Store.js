@@ -7,7 +7,13 @@ const initialState = {
   // Cookies stores String, not objects. So if it exists, convert it into an Object for usage
   cart: Cookies.get("cart")
     ? JSON.parse(Cookies.get("cart"))
-    : { cartItems: [] },
+    : {
+        cartItems: [],
+        shippingAddress: {
+          location: {},
+        },
+        paymentMethod: "",
+      },
 };
 
 function reducer(state, action) {
@@ -35,6 +41,18 @@ function reducer(state, action) {
       // Set the updated state in the Cookies for storage under 'cart' key
       Cookies.set("cart", JSON.stringify({ ...state.cart, cartItems }));
       return { ...state, cart: { ...state.cart, cartItems } };
+    }
+    case "CART_RESET": {
+      return {
+        ...state,
+        cart: {
+          cartItems: [],
+          shippingAddress: {
+            location: {},
+          },
+          paymentMethod: "",
+        },
+      };
     }
     case "CART_EMPTY": {
       return { ...state, cart: { ...state.cart, cartItems: [] } };

@@ -9,7 +9,7 @@ import User from "../../../models/User";
 export const authOptions = {
   session: {
     strategy: "jwt",
-    maxAge: 5 * 60, // 5 minutes for testing // 30 * 24 * 60 * 60, // 30 days for production
+    maxAge: 60 * 60, //5 * 60, // 5 minutes for testing // 30 * 24 * 60 * 60, // 30 days for production
   },
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {

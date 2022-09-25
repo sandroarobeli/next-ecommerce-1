@@ -1,6 +1,8 @@
 import { unstable_getServerSession } from "next-auth/next";
 import { authOptions } from "./auth/[...nextauth]";
 
+// THIS BLOCK ALLOWS TO LOCK ANY API CONTROLLER WE WANT, BY LIMITING IT TO SIGNED IN USERS.
+// CAN AND SHOULD BE USED FOR ANY AND ALL SENSITIVE CONTROLLER FILES
 const handler = async (req, res) => {
   const session = await unstable_getServerSession(req, res, authOptions);
   if (!session) {
