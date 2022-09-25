@@ -57,6 +57,21 @@ function reducer(state, action) {
     case "CART_EMPTY": {
       return { ...state, cart: { ...state.cart, cartItems: [] } };
     }
+    case "SAVE_SHIPPING_ADDRESS": {
+      return {
+        ...state,
+        cart: {
+          ...state.cart,
+          shippingAddress: {
+            ...state.cart.shippingAddress,
+            location: {
+              ...state.cart.shippingAddress.location,
+              ...action.payload,
+            },
+          },
+        },
+      };
+    }
     default:
       return state;
   }
