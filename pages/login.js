@@ -24,22 +24,21 @@ export default function LoginScreen() {
 
   const {
     handleSubmit,
-    resetField, // test
+    resetField,
     register,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = async ({ email, password }) => {
+  const onLoginSubmit = async ({ email, password }) => {
     try {
       const result = await signIn("credentials", {
         redirect: false,
         email,
         password,
       });
-      //console.log("email: ", email);
-      //console.log("password: ", password);
-      resetField("email"); // test restore
-      resetField("password"); // test restore
+      resetField("email");
+      resetField("password");
+
       if (result.error) {
         console.log(result.error); // test
         toast.error(result.error);
@@ -51,11 +50,16 @@ export default function LoginScreen() {
     }
   };
 
+  const onGitSubmit = () => {
+    signIn("github");
+  };
+
   return (
     <Layout title="Login">
+      {/* THIS SEGMENT HANDLES CREDENTIALS LOGIN */}
       <form
         className="mx-auto max-w-screen-md"
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(onLoginSubmit)}
       >
         <h1 className="mb-4 text-xl font-semibold">Login</h1>
         <div className="mb-4">
@@ -106,13 +110,30 @@ export default function LoginScreen() {
         <div className="mb-4">
           <button className="primary-button w-full font-semibold">Login</button>
         </div>
+      </form>
+      {/* THIS SEGMENT HANDLES GITHUB LOGIN */}
+      <div className="mx-auto max-w-screen-md">
+        <div className="mt-6 mb-6 mx-auto flex flex-row justify-center items-center">
+          <hr className="w-2/5 bg-slate-900 mt-2 mb-2" />
+          <h2 className="font-serif mx-5 text-slate-500 text-xl">Or</h2>
+          <hr className="w-2/5 bg-slate-900 mt-2 mb-2" />
+        </div>
+        <div className="mb-4">
+          <button
+            type="button"
+            className="rounded bg-blue-300 py-2 px-4 shadow outline-none hover:bg-blue-400 active:bg-blue-500 w-full font-semibold"
+            onClick={onGitSubmit}
+          >
+            Login with GitHub
+          </button>
+        </div>
         <div className="mb-4">
           Don&apos;t have an account? &nbsp;
           <Link href={"/register"}>
             <a className="text-cyan-600">Register</a>
           </Link>
         </div>
-      </form>
+      </div>
     </Layout>
   );
 }

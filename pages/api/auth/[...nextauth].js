@@ -1,5 +1,6 @@
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GithubProvider from "next-auth/providers/github"; // test
 import bcrypt from "bcryptjs";
 
 import db from "../../../utilities/db";
@@ -57,6 +58,11 @@ export const authOptions = {
         }
         throw new Error("Invalid email or password");
       },
+    }),
+    // To use GitHub authentication, we employ GithubProvider
+    GithubProvider({
+      clientId: process.env.GITHUB_ID,
+      clientSecret: process.env.GITHUB_SECRET,
     }),
   ],
 };

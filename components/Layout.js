@@ -49,7 +49,6 @@ export default function Layout({ title, children }) {
                   </span>
                 </a>
               </Link>
-
               {status === "loading" ? (
                 "Loading..."
               ) : session?.user ? (
