@@ -11,6 +11,7 @@ export const authOptions = {
     strategy: "jwt",
     maxAge: 5 * 60, // 5 minutes for testing // 30 * 24 * 60 * 60, // 30 days for production
   },
+  secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async jwt({ token, user, account, profile, isNewUser }) {
       // user._id comes from the DB and token is stored in the NextAuth cycle
