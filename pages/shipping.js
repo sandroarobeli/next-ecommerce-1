@@ -37,13 +37,7 @@ export default function ShippingScreen() {
     }
   }, [setValue, location]);
 
-  const submitHandler = async ({
-    fullName,
-    address,
-    city,
-    postalCode,
-    country,
-  }) => {
+  const submitHandler = ({ fullName, address, city, postalCode, country }) => {
     dispatch({
       type: "SAVE_SHIPPING_ADDRESS",
       payload: { fullName, address, city, postalCode, country },
