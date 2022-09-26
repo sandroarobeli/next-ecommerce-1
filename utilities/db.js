@@ -57,5 +57,15 @@ async function disconnect() {
   }
 }
 
-const db = { connect, disconnect };
+// Because we use lean() (see explanation in index.js), we want to convert
+// mongoose Docs to javaScript Objects. The below function does that
+const convertDocsToObject = (doc) => {
+  doc._id = doc._id.toString();
+  doc.createdAt = doc.createdAt.toString();
+  doc.updatedAt = doc.updatedAt.toString();
+
+  return doc;
+};
+
+const db = { connect, disconnect, convertDocsToObject };
 export default db;

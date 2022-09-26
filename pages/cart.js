@@ -3,10 +3,13 @@ import Image from "next/image";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import React, { useContext } from "react";
+import Cookies from "js-cookie";
+import axios from "axios";
 
 import Layout from "../components/Layout";
 import XCircleIcon from "../components/XCircleIcon";
 import { Store } from "../utilities/Store";
+import { toast } from "react-toastify";
 
 // We need to render this as client side component, so the CLIENT side content (with full cart)
 // Can match SERVER side content (while cart is still empty). See the export statement at the end!
@@ -18,19 +21,38 @@ function CartScreen() {
 
   const removeFromCartHandler = (item) => {
     dispatch({ type: "CART_REMOVE_ITEM", payload: item });
+    toast.success(`${item.name} removed`);
   };
 
   const EmptyTheCart = () => {
     dispatch({ type: "CART_EMPTY" });
+    // Clear cart items from the Cookies as well, so reload doesn't bring'em back
+    Cookies.set(
+      "cart",
+      JSON.stringify({
+        ...cart,
+        cartItems: [],
+      })
+    );
+    toast.success("The cart emptied");
   };
 
-  const updateCartHandler = (item, quantity) => {
+  const updateCartHandler = async (item, quantity) => {
     const updatedQuantity = Number(quantity);
+
+    const response = await axios.get(`/api/controllers/products/${item._id}`);
+    const { data } = response;
+    // If more chosen than in storage, stops execution and throws an alert modal
+    if (updatedQuantity > data.countInStock) {
+      // return alert("Out of stock!");
+      return toast.error(`Sorry, ${item.name} is out of stock`);
+    }
 
     dispatch({
       type: "CART_ADD_ITEM",
       payload: { ...item, quantity: updatedQuantity },
     });
+    toast.success("Cart updated");
   };
 
   console.log("Cart Items: ", cartItems); // test

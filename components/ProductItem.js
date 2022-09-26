@@ -1,29 +1,34 @@
 import Link from "next/link";
-import React, { useContext } from "react";
+import React, { useState, useContext } from "react";
 
-import { Store } from "../utilities/Store";
+// import DialogModal from "./DialogModal";
+//import { Store } from "../utilities/Store";
 
-export default function ProductItem({ product }) {
-  const { state, dispatch } = useContext(Store);
+export default function ProductItem({ product, addToCartHandler }) {
+  //const { state, dispatch } = useContext(Store);
 
-  const addToCartHandler = () => {
-    const existingItem = state.cart.cartItems.find(
-      (item) => item.slug === product.slug
-    );
-    // If an item is already selected, it increases its quantity, if not - just assigns 1 to start with
-    const quantity = existingItem ? existingItem.quantity + 1 : 1;
-    // If more chosen than in storage, stops execution and throws an alert modal
-    if (quantity > product.countInStock) {
-      return alert("Out of stock!");
-    }
+  // State management for alert dialog modal
+  //const [alertModal, setAlertModal] = useState(false);
 
-    dispatch({
-      type: "CART_ADD_ITEM",
-      payload: { ...product, quantity: quantity },
-    });
-    console.log("State: "); // test
-    console.log(state); // test
-  };
+  // const addToCartHandler = () => {
+  //   const existingItem = state.cart.cartItems.find(
+  //     (item) => item.slug === product.slug
+  //   );
+  //   // If an item is already selected, it increases its quantity, if not - just assigns 1 to start with
+  //   const quantity = existingItem ? existingItem.quantity + 1 : 1;
+  //   // If more chosen than in storage, stops execution and throws an alert modal
+  //   if (quantity > product.countInStock) {
+  //     // return alert("Out of stock!");
+  //     return setAlertModal(true);
+  //   }
+
+  //   dispatch({
+  //     type: "CART_ADD_ITEM",
+  //     payload: { ...product, quantity: quantity },
+  //   });
+  //   console.log("State: "); // test
+  //   console.log(state); // test
+  // };
 
   return (
     <div className="cart">
@@ -47,7 +52,7 @@ export default function ProductItem({ product }) {
         <button
           className="primary-button"
           type="button"
-          onClick={addToCartHandler}
+          onClick={() => addToCartHandler(product)}
         >
           Add to cart
         </button>
